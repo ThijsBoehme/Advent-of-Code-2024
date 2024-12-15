@@ -1,3 +1,8 @@
+package day09
+
+import println
+import readInput
+
 fun main() {
     fun part1(input: String): Long {
         val disk = ArrayDeque<Int>()
@@ -92,11 +97,11 @@ fun main() {
         return sum
     }
 
-    val testInput = readInput("Day09_test").first()
+    val testInput = readInput("day09/Day09_test").first()
     check(part1(testInput) == 1928L)
     check(part2(testInput) == 2858L)
 
-    val input = readInput("Day09").first()
+    val input = readInput("day09/Day09").first()
     part1(input).println()
     part2(input).println()
 }

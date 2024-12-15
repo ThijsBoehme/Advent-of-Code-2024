@@ -1,3 +1,8 @@
+package day08
+
+import println
+import readInput
+
 fun main() {
     fun parse(input: List<String>): Map<Char, List<Pair<Int, Int>>> {
         val frequencyLocations = mutableMapOf<Char, MutableList<Pair<Int, Int>>>()
@@ -91,11 +96,11 @@ fun main() {
         return antinodes.size
     }
 
-    val testInput = readInput("Day08_test")
+    val testInput = readInput("day08/Day08_test")
     check(part1(testInput) == 14)
     check(part2(testInput) == 34)
 
-    val input = readInput("Day08")
+    val input = readInput("day08/Day08")
     part1(input).println()
     part2(input).println()
 }

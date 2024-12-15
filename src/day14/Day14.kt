@@ -1,3 +1,8 @@
+package day14
+
+import println
+import readInput
+
 fun main() {
     data class Guard(val x: Int, val y: Int, val vX: Int, val vY: Int)
 
@@ -48,10 +53,10 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day14_test")
+    val testInput = readInput("day14/Day14_test")
     check(part1(parse(testInput), 11, 7) == 12)
 
-    val input = readInput("Day14")
+    val input = readInput("day14/Day14")
     part1(parse(input), 101, 103).println()
     part2(parse(input), 101, 103)
 }

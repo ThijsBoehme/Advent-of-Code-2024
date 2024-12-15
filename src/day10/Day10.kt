@@ -1,3 +1,8 @@
+package day10
+
+import println
+import readInput
+
 fun main() {
     fun parse(input: List<String>): List<List<Int>> {
         val map = input.map {
@@ -157,7 +162,7 @@ fun main() {
         ) == 81
     )
 
-    val input = readInput("Day10")
+    val input = readInput("day10/Day10")
     part1(input).println()
     part2(input).println()
 }

@@ -1,3 +1,8 @@
+package day03
+
+import println
+import readInput
+
 private const val DO = "do()"
 private const val DONT = "don't()"
 
@@ -43,7 +48,7 @@ fun main() {
     check(part1(listOf("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))")) == 161L)
     check(part2(listOf("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")) == 48L)
 
-    val input = readInput("Day03")
+    val input = readInput("day03/Day03")
     part1(input).println()
     part2(input).println()
 }

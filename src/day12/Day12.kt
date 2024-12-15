@@ -1,3 +1,8 @@
+package day12
+
+import println
+import readInput
+
 fun main() {
     data class Plot(val x: Int, val y: Int, val plant: Char, var visited: Boolean = false)
 
@@ -114,22 +119,22 @@ fun main() {
         return sum
     }
 
-    val testInput1 = readInput("Day12_test1")
+    val testInput1 = readInput("day12/Day12_test1")
     check(part1(testInput1) == 140)
-    val testInput2 = readInput("Day12_test2")
+    val testInput2 = readInput("day12/Day12_test2")
     check(part1(testInput2) == 772)
-    val testInput3 = readInput("Day12_test3")
+    val testInput3 = readInput("day12/Day12_test3")
     check(part1(testInput3) == 1930)
 
     check(part2(testInput1) == 80)
     check(part2(testInput2) == 436)
-    val testInput4 = readInput("Day12_test4")
+    val testInput4 = readInput("day12/Day12_test4")
     check(part2(testInput4) == 236)
-    val testInput5 = readInput("Day12_test5")
+    val testInput5 = readInput("day12/Day12_test5")
     check(part2(testInput5) == 368)
     check(part2(testInput3) == 1206)
 
-    val input = readInput("Day12")
+    val input = readInput("day12/Day12")
     part1(input).println()
     part2(input).println()
 }

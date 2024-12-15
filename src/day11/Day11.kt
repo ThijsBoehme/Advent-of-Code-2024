@@ -1,3 +1,7 @@
+package day11
+
+import println
+import readInput
 import kotlin.math.floor
 import kotlin.math.log
 import kotlin.math.pow
@@ -65,7 +69,7 @@ fun main() {
     check(part2("125 17", 6) == 22L)
     check(part2("125 17", 25) == 55312L)
 
-    val input = readInput("Day11").first()
+    val input = readInput("day11/Day11").first()
     part1(input, 25).println()
     part2(input, 75).println()
 }

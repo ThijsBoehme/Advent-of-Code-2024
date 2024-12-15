@@ -1,3 +1,8 @@
+package day06
+
+import println
+import readInput
+
 private enum class Direction {
     NORTH, SOUTH, EAST, WEST
 }
@@ -119,11 +124,11 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day06_test")
+    val testInput = readInput("day06/Day06_test")
     check(part1(testInput) == 41)
     check(part2(testInput) == 6)
 
-    val input = readInput("Day06")
+    val input = readInput("day06/Day06")
     part1(input).println()
     part2(input).println()
 }

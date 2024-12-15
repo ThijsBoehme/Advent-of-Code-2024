@@ -1,3 +1,8 @@
+package day04
+
+import println
+import readInput
+
 fun main() {
     fun part1(rows: List<String>): Int {
         val directions = listOf(
@@ -53,11 +58,11 @@ fun main() {
         }.sum()
     }
 
-    val testInput = readInput("Day04_test")
+    val testInput = readInput("day04/Day04_test")
     check(part1(testInput) == 18)
     check(part2(testInput) == 9)
 
-    val input = readInput("Day04")
+    val input = readInput("day04/Day04")
     part1(input).println()
     part2(input).println()
 }

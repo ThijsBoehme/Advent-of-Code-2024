@@ -1,3 +1,8 @@
+package day07
+
+import println
+import readInput
+
 fun main() {
 
     fun parse(line: String): Pair<Long, List<Long>> {
@@ -29,11 +34,11 @@ fun main() {
     fun part2(input: List<String>) =
         calibrationResult(input) { a, b -> listOf(a + b, a * b, (a.toString() + b.toString()).toLong()) }
 
-    val testInput = readInput("Day07_test")
+    val testInput = readInput("day07/Day07_test")
     check(part1(testInput) == 3749L)
     check(part2(testInput) == 11387L)
 
-    val input = readInput("Day07")
+    val input = readInput("day07/Day07")
     part1(input).println()
     part2(input).println()
 }

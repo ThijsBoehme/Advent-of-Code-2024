@@ -1,3 +1,7 @@
+package day02
+
+import println
+import readInput
 import kotlin.math.abs
 
 fun main() {
@@ -29,11 +33,11 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day02_test")
+    val testInput = readInput("day02/Day02_test")
     check(part1(testInput) == 2)
     check(part2(testInput) == 4)
 
-    val input = readInput("Day02")
+    val input = readInput("day02/Day02")
     part1(input).println()
     part2(input).println()
 }

@@ -1,3 +1,6 @@
+package day05
+
+import println
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
@@ -50,12 +53,12 @@ fun main() {
         }.sumOf { it[it.size / 2].toInt() }
     }
 
-    val testInput = readInput("Day05_test")
+    val testInput = readInput("day05/Day05_test")
     val (testRules, testUpdates) = testInput.split("\n\n").map(String::lines)
     check(part1(parseRules(testRules), parseUpdates(testUpdates)) == 143)
     check(part2(parseRules(testRules), parseUpdates(testUpdates)) == 123)
 
-    val input = readInput("Day05")
+    val input = readInput("day05/Day05")
     val (rules, updates) = input.split("\n\n").map(String::lines)
     part1(parseRules(rules), parseUpdates(updates)).println()
     part2(parseRules(rules), parseUpdates(updates)).println()

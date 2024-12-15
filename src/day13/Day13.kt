@@ -1,3 +1,7 @@
+package day13
+
+import println
+import readInput
 import kotlin.math.round
 
 fun main() {
@@ -57,10 +61,10 @@ fun main() {
         return solve(clawMachines, false)
     }
 
-    val testInput = readInput("Day13_test")
+    val testInput = readInput("day13/Day13_test")
     check(part1(testInput) == 480L)
 
-    val input = readInput("Day13")
+    val input = readInput("day13/Day13")
     part1(input).println()
     part2(input).println()
 }
