@@ -3,7 +3,7 @@ package day15
 import println
 import readInput
 
-sealed class Object(var xRange: IntRange, var y: Int, private val map: List<Object>) {
+private sealed class Object(var xRange: IntRange, var y: Int, private val map: List<Object>) {
     fun canMove(direction: Direction): Boolean {
         if (this is Wall) return false
 
@@ -49,11 +49,11 @@ sealed class Object(var xRange: IntRange, var y: Int, private val map: List<Obje
     }
 }
 
-class Robot(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
-class Box(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
-class Wall(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
+private class Robot(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
+private class Box(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
+private class Wall(x: IntRange, y: Int, map: List<Object>) : Object(x, y, map)
 
-enum class Direction(private val c: Char, val dx: Int, val dy: Int) {
+private enum class Direction(private val c: Char, val dx: Int, val dy: Int) {
     Up('^', 0, -1),
     Right('>', 1, 0),
     Down('v', 0, 1),
