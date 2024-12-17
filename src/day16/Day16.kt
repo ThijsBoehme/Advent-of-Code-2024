@@ -11,11 +11,11 @@ private data class Node(val position: Vec2, val orientation: Direction)
 
 private data class Reindeer(val x: Int, val y: Int, val orientation: Direction)
 
-private enum class Direction(val dx: Int, val dy: Int, val vector: Vec2) {
-    North(0, -1, Vec2(0, -1)),
-    East(1, 0, Vec2(1, 0)),
-    South(0, 1, Vec2(0, 1)),
-    West(-1, 0, Vec2(-1, 0));
+private enum class Direction(val vector: Vec2) {
+    North(Vec2(0, -1)),
+    East(Vec2(1, 0)),
+    South(Vec2(0, 1)),
+    West(Vec2(-1, 0));
 
     fun turnClockwise() = when (this) {
         North -> East
@@ -30,126 +30,9 @@ private enum class Direction(val dx: Int, val dy: Int, val vector: Vec2) {
         South -> East
         West -> South
     }
-
-    fun opposite() = when (this) {
-        North -> South
-        East -> West
-        South -> South
-        West -> East
-    }
 }
 
 fun main() {
-    fun print(objects: Map<Pair<Int, Int>, Char>, width: Int, height: Int) {
-        repeat(height) { y ->
-            repeat(width) { x ->
-                val character = objects.getOrDefault(x to y, ' ')
-                print(character)
-            }
-            println()
-        }
-    }
-
-//    fun part1(input: List<String>): Int {
-//        fun pathsToEnd(
-//            walls: Set<Pair<Int, Int>>,
-//            reindeer: Reindeer,
-//            history: Set<Reindeer>,
-//            end: Pair<Int, Int>
-//        ): Long {
-//            print(
-//                buildMap {
-//                    walls.forEach { wall -> put(wall, '#') }
-//                    (history + reindeer).forEach {
-//                        put(
-//                            it.x to it.y, when (it.orientation) {
-//                                Direction.North -> '^'
-//                                Direction.East -> '>'
-//                                Direction.South -> 'v'
-//                                Direction.West -> '<'
-//                            }
-//                        )
-//                    }
-//                    put(end, 'E')
-//                },
-//                input[0].length,
-//                input.size
-//            )
-////            println(reindeer)
-//            // If at destination, return 0
-//            if (reindeer.x == end.first && reindeer.y == end.second) return 0
-//
-//            // If in wall or already visited location, return Int.MAX
-//            if (walls.contains(reindeer.x to reindeer.y)
-//                || history.any {
-//                    it.x == reindeer.x && it.y == reindeer.y
-////                        && it.orientation == reindeer.orientation.opposite()
-//                }
-//            ) {
-//                return Int.MAX_VALUE.toLong()
-//            }
-//
-//            // Going ahead
-//            val spaceAhead = reindeer.x + reindeer.orientation.dx to reindeer.y + reindeer.orientation.dy
-//            val pathLengthGoingForward = if (walls.contains(spaceAhead)) {
-//                Int.MAX_VALUE.toLong()
-//            } else {
-//                pathsToEnd(
-//                    walls,
-//                    reindeer.copy(x = spaceAhead.first, y = spaceAhead.second),
-//                    history + reindeer,
-//                    end
-//                ) + 1
-//            }
-//
-//            // Turning left
-//            val lookingLeft = reindeer.copy(orientation = reindeer.orientation.turnCounterClockwise())
-//            val spaceLeft = lookingLeft.x + lookingLeft.orientation.dx to reindeer.y + lookingLeft.orientation.dy
-//            val pathLengthTurningLeft = if (walls.contains(spaceLeft)) {
-//                Int.MAX_VALUE.toLong()
-//            } else {
-//                pathsToEnd(
-//                    walls,
-//                    lookingLeft.copy(x = spaceLeft.first, y = spaceLeft.second),
-//                    history + reindeer,
-//                    end
-//                ) + 1001
-//            }
-//
-//            // Turning right
-//            val lookingRight = reindeer.copy(orientation = reindeer.orientation.turnClockwise())
-//            val spaceRight = lookingRight.x + lookingRight.orientation.dx to reindeer.y + lookingRight.orientation.dy
-//            val pathLengthTurningRight = if (walls.contains(spaceRight)) {
-//                Int.MAX_VALUE.toLong()
-//            } else {
-//                pathsToEnd(
-//                    walls,
-//                    reindeer.copy(orientation = reindeer.orientation.turnClockwise()),
-//                    history + reindeer,
-//                    end
-//                ) + 1001
-//            }
-//
-//            return minOf(pathLengthGoingForward, pathLengthTurningLeft, pathLengthTurningRight)
-//        }
-//
-//        val walls = mutableSetOf<Pair<Int, Int>>()
-//        lateinit var reindeer: Reindeer
-//        lateinit var end: Pair<Int, Int>
-//
-//        input.forEachIndexed { y, line ->
-//            line.forEachIndexed { x, c ->
-//                when (c) {
-//                    '#' -> walls.add(Pair(x, y))
-//                    'S' -> reindeer = Reindeer(x, y, Direction.East)
-//                    'E' -> end = x to y
-//                }
-//            }
-//        }
-//
-//        return pathsToEnd(walls, reindeer, emptySet(), end).toInt()
-//    }
-
     fun parse(input: List<String>): Triple<MutableSet<Vec2>, Reindeer, Vec2> {
         val walls = mutableSetOf<Vec2>()
         val emptySpaces = mutableSetOf<Vec2>()
@@ -188,18 +71,6 @@ fun main() {
         val prev = mutableMapOf<Node, MutableList<Node>>()
         val queue = vertices.toMutableList()
         distances[Node(Vec2(start.x, start.y), start.orientation)] = 0
-
-//        val oldQueue = buildMap {
-//            Direction.entries.forEach { direction ->
-//                put(Node(Vec2(start.x, start.y), direction), Int.MAX_VALUE)
-//                put(Node(end, direction), Int.MAX_VALUE)
-//                emptySpaces.forEach {
-//                    put(Node(it, direction), Int.MAX_VALUE)
-//                }
-//            }
-//
-//            put(Node(Vec2(start.x, start.y), start.orientation), 0)
-//        }.toMutableMap()
 
         while (queue.isNotEmpty()) {
             val u = queue.minBy { distances[it]!! }
@@ -245,7 +116,7 @@ fun main() {
     fun part1(input: List<String>): Int {
         val (emptySpaces, start, end) = parse(input)
 
-        val (distances, prev) = dijkstra(start, end, emptySpaces)
+        val (distances, _) = dijkstra(start, end, emptySpaces)
 
         return distances.filterKeys { it.position == end }
             .values
