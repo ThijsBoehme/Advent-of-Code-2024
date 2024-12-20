@@ -1,29 +1,19 @@
 package day20
 
-import kotlinx.coroutines.*
 import println
 import readInput
+import kotlin.math.abs
 
-fun main() = runBlocking(Dispatchers.Default) {
-    suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
-        map { async { f(it) } }.awaitAll()
-    }
-
+fun main() {
     data class Point(val x: Int, val y: Int) {
         operator fun plus(other: Point) = Point(x + other.x, y + other.y)
 
-        fun neighbours(): Set<Point> = setOf(
-            Point(x + 1, y),
-            Point(x - 1, y),
-            Point(x, y + 1),
-            Point(x, y - 1),
-        )
+        fun distanceTo(other: Point) = abs(x - other.x) + abs(y - other.y)
     }
 
     data class Puzzle(
         val start: Point,
         val end: Point,
-        val walls: Set<Point>,
         val emptySpaces: Set<Point>,
     )
 
@@ -35,7 +25,6 @@ fun main() = runBlocking(Dispatchers.Default) {
     )
 
     fun parse(input: List<String>): Puzzle {
-        val walls = mutableSetOf<Point>()
         val emptySpaces = mutableSetOf<Point>()
         lateinit var start: Point
         lateinit var end: Point
@@ -43,14 +32,13 @@ fun main() = runBlocking(Dispatchers.Default) {
         input.forEachIndexed { y, line ->
             line.forEachIndexed { x, c ->
                 when (c) {
-                    '#' -> walls.add(Point(x, y))
                     'S' -> start = Point(x, y)
                     'E' -> end = Point(x, y)
                     '.' -> emptySpaces.add(Point(x, y))
                 }
             }
         }
-        return Puzzle(start, end, walls, emptySpaces + start + end)
+        return Puzzle(start, end, emptySpaces + start + end)
     }
 
     fun dijkstra(vertices: Set<Point>, start: Point): Map<Point, Int> {
@@ -79,62 +67,54 @@ fun main() = runBlocking(Dispatchers.Default) {
         return distances
     }
 
-    suspend fun part1(input: List<String>, timeToSave: Int): Int {
-        val (start, end, walls, emptySpaces) = parse(input)
+    fun solve(input: List<String>, timeToSave: Int, cheatTime: Int): Int {
+        val (start, end, emptySpaces) = parse(input)
 
-        val distances = dijkstra(emptySpaces, start)
-        val referenceTime = distances.filterKeys { it == end }
+        val distancesFromStart = dijkstra(emptySpaces, start)
+        val distancesFromEnd = dijkstra(emptySpaces, end)
+        val referenceTime = distancesFromStart.filterKeys { it == end }
             .values
             .min()
 
-        // With 2 picoseconds cheat time, you can pass through 1 piece of wall
-        return walls
-            // Optimization: only consider walls with at least 2 free spaces next to it
-            .filter { wall ->
-                wall.neighbours()
-                    .count { emptySpaces.contains(it) } >= 2
+        return distancesFromStart
+            .keys
+            .flatMap { a ->
+                distancesFromEnd.keys.map { b -> a to b }
             }
-            .parallelMap { wall ->
-                dijkstra(emptySpaces + wall, start)
-                    .filterKeys { it == end }
-                    .values
-                    .min()
-            }
-            .count { it <= referenceTime - timeToSave }
-    }
-
-    fun part2(input: List<String>, timeToSave: Int): String {
-        TODO()
+            .filter { (a, b) -> a.distanceTo(b) in 1..cheatTime }
+            .filter { (a, b) -> distancesFromStart[a]!! < distancesFromStart[b]!! }
+            .count { (a, b) -> distancesFromStart[a]!! + distancesFromEnd[b]!! + a.distanceTo(b) <= referenceTime - timeToSave }
     }
 
     val testInput = readInput("day20/Day20_test")
-    check(part1(testInput, 2) == 44)
-    check(part1(testInput, 4) == 30)
-    check(part1(testInput, 6) == 16)
-    check(part1(testInput, 8) == 14)
-    check(part1(testInput, 10) == 10)
-    check(part1(testInput, 12) == 8)
-    check(part1(testInput, 20) == 5)
-    check(part1(testInput, 36) == 4)
-    check(part1(testInput, 38) == 3)
-    check(part1(testInput, 40) == 2)
-    check(part1(testInput, 64) == 1)
-    // check(part2(testInput, 50) == 285)
-    // check(part2(testInput, 52) == 253)
-    // check(part2(testInput, 54) == 222)
-    // check(part2(testInput, 56) == 193)
-    // check(part2(testInput, 58) == 154)
-    // check(part2(testInput, 60) == 129)
-    // check(part2(testInput, 62) == 106)
-    // check(part2(testInput, 64) == 86)
-    // check(part2(testInput, 66) == 67)
-    // check(part2(testInput, 68) == 55)
-    // check(part2(testInput, 70) == 41)
-    // check(part2(testInput, 72) == 29)
-    // check(part2(testInput, 74) == 7)
-    // check(part2(testInput, 76) == 3)
+    check(solve(testInput, 2, 2) == 44)
+    check(solve(testInput, 4, 2) == 30)
+    check(solve(testInput, 6, 2) == 16)
+    check(solve(testInput, 8, 2) == 14)
+    check(solve(testInput, 10, 2) == 10)
+    check(solve(testInput, 12, 2) == 8)
+    check(solve(testInput, 20, 2) == 5)
+    check(solve(testInput, 36, 2) == 4)
+    check(solve(testInput, 38, 2) == 3)
+    check(solve(testInput, 40, 2) == 2)
+    check(solve(testInput, 64, 2) == 1)
+
+    check(solve(testInput, 50, 20) == 285)
+    check(solve(testInput, 52, 20) == 253)
+    check(solve(testInput, 54, 20) == 222)
+    check(solve(testInput, 56, 20) == 193)
+    check(solve(testInput, 58, 20) == 154)
+    check(solve(testInput, 60, 20) == 129)
+    check(solve(testInput, 62, 20) == 106)
+    check(solve(testInput, 64, 20) == 86)
+    check(solve(testInput, 66, 20) == 67)
+    check(solve(testInput, 68, 20) == 55)
+    check(solve(testInput, 70, 20) == 41)
+    check(solve(testInput, 72, 20) == 29)
+    check(solve(testInput, 74, 20) == 7)
+    check(solve(testInput, 76, 20) == 3)
 
     val input = readInput("day20/Day20")
-    part1(input, 100).println()
-    // part2(input, 100).println()
+    solve(input, 100, 2).println()
+    solve(input, 100, 20).println()
 }
